@@ -43,8 +43,6 @@ void setup(void)
 
   Serial.begin(57600);
   printf_begin();
-  printf("\n\rRF24/examples/pingpair/\n\r");
-  printf("ROLE: %s\n\r",role_friendly_name[role]);
 
   //
   // Setup and configure rf radio
@@ -93,7 +91,7 @@ void loop(void)
       while (!done)
       {
         // Fetch the payload, and see if this was the last one.
-        done = radio.read( &rgbStr,11) );
+        done = radio.read( &rgbStr,11);
 
         // Spew it
         Serial.print("Got payload...");
@@ -113,6 +111,5 @@ void loop(void)
       // Now, resume listening so we catch the next packets.
       radio.startListening();
     }
-  }
 }
 // vim:cin:ai:sts=2 sw=2 ft=cpp
