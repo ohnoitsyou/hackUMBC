@@ -63,10 +63,41 @@ void loop(void) {
       while(blu.length() < 3) {
         blu = '0' + blu;
       }
-      
+
       Serial.print(red);
       Serial.print(grn);
       Serial.println(blu);
+
+      radio.stopListening();
+      printf("writing string to radio... ");
+      bool ok = radio.write(&rgbStr,11);
+      if(ok) {
+        printf("ok...");
+      } else {
+        printf("failed.\n\r");
+      }
+      radio.startListening();
+
+      unsigned long started_waiting_at = millis();
+      bool timeout = false;
+      while(!radio.available() && ! timeout) {
+        if(millis() - started_waiting_at > 500) {
+          timeout = true;
+        }
+      }
+      if(timeout) {
+        printf("Failed, response timed out.\n\r");
+      } else {
+        String resp;
+        radio.read(&resp, 11);
+        Serial.print("Got response ");
+        Serial.println(resp);
+        if(resp == rgbStr) {
+          Serial.println("they are the same");
+        } else {
+          Serial.println(resp);
+        }
+      }
     }
   }
 }
