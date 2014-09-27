@@ -16,6 +16,7 @@ void setup(void) {
   Serial.begin(57600);
   printf_begin();
 
+
   // Setup the radio
   radio.begin();
   // setup retries
@@ -52,6 +53,7 @@ void loop(void) {
       red = rgbStr.substring(0,redSep);
       grn = rgbStr.substring(redSep + 1,grnSep);
       blu = rgbStr.substring(grnSep + 1);
+
       while(red.length() < 3){
         red = '0' + red;
       }
@@ -61,6 +63,7 @@ void loop(void) {
       while(blu.length() < 3) {
         blu = '0' + blu;
       }
+      
       Serial.print(red);
       Serial.print(grn);
       Serial.println(blu);
