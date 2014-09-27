@@ -32,19 +32,31 @@ void setup(void) {
 }
 
 void loop(void) {
-  while(Serial.available() > 0) {
-    int red = Serial.parseInt();
-    int grn = Serial.parseInt();
-    int blu = Serial.parseInt();
-  }   
-  if(Serial.read() == '\n') {
-    red = 255 - constrain(red,0,255);
-    grn = 255 - constrain(grn,0,255);
-    blu = 255 - constrain(blu,0,255);
-    Serial.print(red);
-    Serial.print(":");
-    Serial.print(grn);
-    Serial.print(":");
-    Serial.print(blu);
+  String rgbStr;
+  char character;
+  if(Serial.available() > 0) {
+    while(Serial.available() > 0) {
+      character = Serial.read();
+      rgbStr += character;
+      delay(3);
+    }
+    // Serial.println(rgbStr);
+    // break apart the string we got to be R:G:B
+    String red, grn, blu;
+    int redSep = rgbStr.indexOf(':');
+    int grnSep = rgbStr.indexOf(':',redSep + 1);
+
+    // Make sure that there are at least two seperators,
+    // I should make sure there isn't a 3rd.
+    // For now I'll trust my input
+    if(redSep != -1 && grnSep != -1) {
+      red = rgbStr.substring(0,redSep);
+      grn = rgbStr.substring(redSep + 1,grnSep);
+      blu = rgbStr.substring(grnSep + 1);
+
+      Serial.print(red);
+      Serial.print(grn);
+      Serial.println(blu);
+    }
   }
 }
