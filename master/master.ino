@@ -22,7 +22,7 @@ void setup(void) {
   // setup retries
   radio.setRetries(15,15);
   //payload size
-  radio.setPayloadSize(8);
+  radio.setPayloadSize(15);
 
   // Setup 2 pipes
   radio.openWritingPipe(pipes[0]);
@@ -42,6 +42,7 @@ void loop(void) {
       rgbStr += character;
       delay(3);
     }
+    Serial.println(rgbStr);
     // Serial.println(rgbStr);
     // break apart the string we got to be R:G:B
     String red, grn, blu;
@@ -59,6 +60,7 @@ void loop(void) {
       while(red.length() < 3){
         red = '0' + red;
       }
+
       while(grn.length() < 3) {
         grn = '0' + grn;
       }
@@ -73,12 +75,12 @@ void loop(void) {
       rgbStr = red + ":" + grn + ":" + blu;
 
       radio.stopListening();
-      printf("writing string to radio... ");
+//      printf("writing string to radio... ");
       bool ok = radio.write(&rgbStr,11);
       if(ok) {
         printf("ok...");
       } else {
-        printf("failed.\n\r");
+//        printf("failed.\n\r");
       }
       radio.startListening();
 
@@ -88,14 +90,18 @@ void loop(void) {
         if(millis() - started_waiting_at > 500) {
           timeout = true;
         }
+ //       Serial.print("in timeout Loop");
       }
       if(timeout) {
-        printf("Failed, response timed out.\n\r");
+   //     printf("Failed, response timed out.\n\r");
       } else {
         String resp;
         radio.read(&resp, 11);
         Serial.print("Got response ");
-        Serial.println(resp);
+  //      Serial.println(resp);
+        if(resp == rgbStr) {
+//          Serial.println("they are the same");
+        }
       }
     }
   }
