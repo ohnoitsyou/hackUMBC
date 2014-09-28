@@ -35,6 +35,8 @@ RF24 radio(9,10);
 // Radio pipe addresses for the 2 nodes to communicate.
 const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
 
+// setup our variables for our colors
+String red, grn, blu;
 void setup(void)
 {
   //
@@ -74,6 +76,16 @@ void setup(void)
   //
 
   radio.printDetails();
+
+  // setup the led's
+  pinMode(3,OUTPUT);
+  pinMode(5,OUTPUT);
+  pinMode(6,OUTPUT);
+
+  // initilize them to off
+  analogWrite(3,255);
+  analogWrite(5,255);
+  analogWrite(6,255);
 }
 
 void loop(void)
@@ -96,6 +108,23 @@ void loop(void)
         // Spew it
         Serial.print("Got payload...");
         Serial.println(rgbStr);
+
+        int redSep = rgbStr.indexOf(':');
+        int grnSep = rgbStr.indexOf(':',redSep + 1);
+
+        // Make sure that there are at least two seperators,
+        // I should make sure there isn't a 3rd.
+        // For now I'll trust my input
+        if(redSep != -1 && grnSep != -1) {
+          red = rgbStr.substring(0,redSep);
+          grn = rgbStr.substring(redSep + 1,grnSep);
+          blu = rgbStr.substring(grnSep + 1);
+
+          analogWrite(3, red.toInt());
+          analogWrite(5, grn.toInt());
+          analogWrite(6, blu.toInt());
+        }
+
 	      // Delay just a little bit to let the other unit
 	      // make the transition to receiver
 	      delay(20);

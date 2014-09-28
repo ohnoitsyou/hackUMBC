@@ -32,6 +32,8 @@ void setup(void) {
 }
 
 void loop(void) {
+  // We don't need to be listening, normally.
+  radio.stopListening();
   String rgbStr;
   char character;
   if(Serial.available() > 0) {
@@ -68,6 +70,8 @@ void loop(void) {
       Serial.print(grn);
       Serial.println(blu);
 
+      rgbStr = red + ":" + grn + ":" + blu;
+
       radio.stopListening();
       printf("writing string to radio... ");
       bool ok = radio.write(&rgbStr,11);
@@ -80,7 +84,7 @@ void loop(void) {
 
       unsigned long started_waiting_at = millis();
       bool timeout = false;
-      while(!radio.available() && ! timeout) {
+      while(! radio.available() && ! timeout) {
         if(millis() - started_waiting_at > 500) {
           timeout = true;
         }
@@ -92,11 +96,6 @@ void loop(void) {
         radio.read(&resp, 11);
         Serial.print("Got response ");
         Serial.println(resp);
-        if(resp == rgbStr) {
-          Serial.println("they are the same");
-        } else {
-          Serial.println(resp);
-        }
       }
     }
   }
