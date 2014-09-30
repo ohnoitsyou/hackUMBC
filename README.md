@@ -3,7 +3,7 @@ hackUMBC
 Inspiration from: http://www.instructables.com/id/Minimalistic-LED-wall-light/
 
 This is the code I originaly tried to use for my two arduinos.
-The intent was to connect them using a pair of NRF24LO1's to have them talk back and forth.
+The intent was to connect them using a pair of NRF24L01's to have them talk back and forth.
 Something is really broken in the code. I welcome any pull requests that can help me fix it!
 
 If the units fail to communicate, they continue to work fine. no data is sent, but the application still runs.
