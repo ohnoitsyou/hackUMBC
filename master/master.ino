@@ -93,7 +93,7 @@ void loop(void) {
  //       Serial.print("in timeout Loop");
       }
       if(timeout) {
-   //     printf("Failed, response timed out.\n\r");
+        printf("Failed, response timed out.\n\r");
       } else {
         String resp;
         radio.read(&resp, 11);
